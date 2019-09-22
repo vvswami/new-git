@@ -1,0 +1,210 @@
+package light;
+
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.time.chrono.MinguoEra;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+
+import org.apache.poi.ss.usermodel.DataFormatter;
+
+public class googleSearch {
+
+	public void tc() throws IOException, InterruptedException {
+
+		for (int s = 1; s <= 50; s++) {
+
+			System.out.println("Enter the loop"+s);
+
+			ArrayList<String> URLs = Readexceldata(0);
+
+			System.out.println("Total urls count:" + URLs.size());
+			int i = 1;
+			for (int v = 1; v <= 2; v++) {
+				System.out.println("---------->Enter Excel Data----------->" + v);
+
+				for (i = 1; i < URLs.size(); i++) {
+
+					System.setProperty("webdriver.chrome.driver",
+							"D:\\Testing Software\\Vishnu Sir_Selenium\\chromedriver.exe");
+					WebDriver driver = new ChromeDriver();
+					driver.manage().window().maximize();
+					driver.get("https://www.google.com/");
+
+					/*if (i % 5 == 0) {
+						driver.manage().timeouts().implicitlyWait(2,TimeUnit.MINUTES);
+						System.out.println(i);
+					}
+*/
+					if (i % 100 == 0) {
+						driver.manage().timeouts().implicitlyWait(15,TimeUnit.MINUTES);
+					}
+
+					System.out.println("=======>url i value=======>" + i);
+
+					Set<Cookie> allcookies = driver.manage().getCookies();
+
+					// count cookies
+					//System.out.println("count cookies :" + allcookies.size());
+
+					for (Cookie cookie : allcookies) {
+						//System.out.println("Name -" + cookie.getName());
+						//System.out.println("Domain -" + cookie.getDomain());
+						//System.out.println("path -" + cookie.getPath());
+						//System.out.println("Value -" + cookie.getValue());
+
+					}
+
+					driver.manage().deleteAllCookies();
+
+					Set<Cookie> aftercookies = driver.manage().getCookies();
+
+					//System.out.println("Delete after cookies count :" + aftercookies.size());
+					//System.out.println("<========================================>");
+
+					driver.findElement(By.className("gLFyf")).sendKeys(URLs.get(i));
+
+					driver.findElement(By.className("gLFyf")).sendKeys(Keys.ENTER);
+
+					System.out.println("Inner category name----------------->:" + URLs.get(i));
+
+					if (i % 5 == 0) {
+
+						//System.out.println("--------------->Enter if block--------------->");
+
+						driver.manage().timeouts().implicitlyWait(1, TimeUnit.MINUTES);
+
+					}
+
+					try {
+						for (int a = 1; a <= 1; a++) {
+							Thread.sleep(1000);
+							// xpath in google page
+							// String link =
+							// driver.findElement(By.xpath("//cite[@class='iUh30
+							// bc'][contains(text(),'https://www.buildeeji.com')]")).getText();
+							String link = driver
+									.findElement(By
+											.xpath("//cite[@class='iUh30 bc'][contains(text(),'https://www.buildeeji.com')]"))
+									.getText();
+							System.out.println(link);
+
+							// comparision
+							if (link.contains("https://www.buildeeji.com")) {
+
+								Actions action = new Actions(driver);
+								WebElement link1 = driver.findElement(By.xpath(
+										"//cite[@class='iUh30 bc'][contains(text(),'https://www.buildeeji.com')]"));
+								action.contextClick(link1).perform();
+								Thread.sleep(1000);
+								Robot e = new Robot();
+
+								e.keyPress(KeyEvent.VK_ENTER);
+								Thread.sleep(1000);
+								e.keyPress(KeyEvent.VK_ENTER);
+								e.keyRelease(KeyEvent.VK_ENTER);
+								e.keyRelease(KeyEvent.VK_ENTER);
+
+								// Create an ArrayList and store the open tabs
+								ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+
+								// below code will switch to new tab
+								driver.switchTo().window(tabs.get(1));
+
+								Thread.sleep(10000);
+								JavascriptExecutor js = (JavascriptExecutor) driver;
+								js.executeScript("window.scrollBy(0,1000)");
+
+								Thread.sleep(1000);
+								JavascriptExecutor js1 = (JavascriptExecutor) driver;
+								js1.executeScript("window.scrollBy(0,-500)");
+								driver.manage().timeouts().implicitlyWait(1, TimeUnit.MINUTES);
+								// get current url
+								String url = driver.getCurrentUrl();
+								System.out.println("urls===============>" + url);
+								Thread.sleep(5000);
+
+								// perform whatever actions you want in new tab
+								// then
+								// close it
+
+								driver.close();
+
+								// Switch back to your original tab
+								driver.switchTo().window(tabs.get(0));
+								Thread.sleep(1000);
+								driver.close();
+								// driver.navigate().refresh();
+								// driver.findElement(By.className("gLFyf")).clear();
+								// driver.findElement(By.className("gLFyf")).clear();
+
+								// driver.close();
+							} // if close
+
+						} // 1 st for close
+
+					} // Try close
+
+					catch (Exception e) {
+
+						driver.close();
+
+					}
+
+				} // main for close
+
+			} // first for loop
+
+			System.out.println("Task completed");
+		}
+
+	}
+
+	public ArrayList<String> Readexceldata(int rowNo) throws IOException {
+
+		FileInputStream fis = new FileInputStream("C:\\Users\\venkataswami\\Desktop\\data1212454545.xls");
+
+		HSSFWorkbook wb = new HSSFWorkbook(fis);
+
+		HSSFSheet s = wb.getSheet("Sheet1");
+
+		Iterator<Row> rowiterator = s.iterator();
+
+		rowiterator.next();
+
+		ArrayList<String> list = new ArrayList<String>();
+		while (rowiterator.hasNext()) {
+			list.add(rowiterator.next().getCell(rowNo).getStringCellValue());
+
+		}
+
+		return list;
+
+	}
+
+	public static void main(String[] args) throws Exception {
+
+		googleSearch data = new googleSearch();
+
+		data.tc();
+	}
+
+}
