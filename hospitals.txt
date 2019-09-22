@@ -1,0 +1,72 @@
+package Groups;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Hospitals {
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver", "E:\\selenium\\chromedriver.exe");
+
+		WebDriver driver = new ChromeDriver();
+
+		driver.manage().window().maximize();
+		driver.get("https://www.practo.com/hyderabad/hospitals");
+
+		String count = driver
+				.findElement(By.xpath(".//*[@id='container']/div[3]/div/div[2]/div[1]/div[1]/div[1]/h4/span[1]"))
+				.getText();
+
+		System.out.println(count);
+
+		int a = Integer.parseInt(count);
+		System.out.println("Totoal Record count" + a);
+
+		// company name click
+		driver.findElement(By
+				.xpath(".//*[@id='container']/div[3]/div/div[2]/div[1]/div[2]/div[1]/div/div[1]/div[1]/div/div[2]/div/a/h2"))
+				.click();
+
+		// company
+		String com = driver
+				.findElement(By.xpath(".//*[@id='container']/div[3]/div/div[2]/div[1]/div[1]/div/div[2]/h1/span"))
+				.getText();
+		System.out.println(com);
+
+		// location
+		String location = driver
+				.findElement(By.xpath(".//*[@id='container']/div[3]/div/div[2]/div[1]/div[1]/div/div[2]/h2")).getText();
+		System.out.println(location);
+
+		// about us
+		String about = driver.findElement(By.xpath(".//*[@id='react-tabs-1']/div/div[1]/div[1]/div/p")).getText();
+		System.out.println(about);
+
+		// address
+		String add = driver.findElement(By.xpath(".//*[@id='react-tabs-1']/div/div[1]/div[2]/div[1]/p")).getText();
+		System.out.println(add);
+
+		// services button
+
+		driver.findElement(By.xpath(".//*[@id='react-tabs-8']/a/span/span")).click();
+
+		// multiple services
+		String mul = driver.findElement(By.xpath(".//*[@id='entity']/div[2]/div[1]/div/span/a")).getText();
+		System.out.println(mul);
+
+		// call button click
+
+		driver.findElement(
+				By.xpath(".//*[@id='container']/div[3]/div/div[2]/div[1]/div[1]/div/div[3]/div[1]/div/button")).click();
+
+		// mobile
+
+		String mob = driver.findElement(By.xpath("//div[@class='c-vn__number']")).getText();
+		System.out.println(mob);
+
+		driver.navigate().back();
+
+	}
+
+}
